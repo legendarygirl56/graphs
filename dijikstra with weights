@@ -1,0 +1,72 @@
+#include<bits/stdc++.h>
+
+#define ll int
+#define llu unsigned long long int
+#define f(n) for(ll i=0;i<n;i++)
+#define fr(n) for(ll i=n-1;i>=0;i--)
+#define endl "\n"
+#define pi pair<ll,ll>
+#define inf 1e7
+
+using namespace std;
+
+vector<vector<pi>> v(100000);
+vector<ll> dis(100000,inf);
+ll n,m;
+vector<vector<ll>> path(100000);
+priority_queue<ll> pq; 
+
+int main()
+{
+	//#ifdef ONLINE_JUDGE
+	freopen("input.txt","r",stdin);
+	freopen("output.txt","w",stdout);
+	//#endif
+	std::ios_base::sync_with_stdio(false);
+
+	//algorithm for finding path in graph
+	cin>>n>>m;
+
+	
+	for(ll i=0;i<m;i++)
+	{
+		ll x,y,w;
+		cin>>x>>y>>w;
+		v[x].push_back(pi(y,w));
+		//v[y].push_back(pi(x,w));
+	}
+	ll src=5;
+	//cin>>src;
+	pq.push(src);
+	dis[src]=0;
+	while(!pq.empty()) 
+	{
+		ll u;
+		u=pq.top();
+		pq.pop();
+		for(ll i=0;i<v[u].size();i++)
+		{
+			if(dis[(v[u][i]).first]>dis[u]+((v[u][i]).second))
+			{
+				dis[(v[u][i]).first]=dis[u]+((v[u][i]).second);
+				path[(v[u][i]).first].clear();
+				path[(v[u][i]).first].insert(path[(v[u][i]).first].begin(),path[u].begin(),path[u].end());
+				path[(v[u][i]).first].push_back(u);
+				pq.push(v[u][i].first);
+			}
+		}
+	}
+	if(path[n].size()==0)
+	{
+		cout<<-1<<endl;
+	}	
+
+	for(ll i=1;i<=n;i++){
+		for(ll j=0;j<path[i].size();j++)
+			{
+				cout<<path[i][j]<<" ";
+			}
+			cout<<i<<endl;
+	}
+	return 0;
+}
